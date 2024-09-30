@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Cuboid Calculator</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>Cuboid Calculator</h1>
+  <form>
+    <label for="length">Length:</label>
+    <input type="number" id="length" value="10.4"><br><br>
+    <label for="width">Width:</label>
+    <input type="number" id="width" value="13.5"><br><br>
+    <label for="height">Height:</label>
+    <input type="number" id="height" value="8.2"><br><br>
+    <button onclick="calculate()">Calculate</button>
+  </form>
+  <div id="result">
+    <p id="surface-area"></p>
+    <p id="volume"></p>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
