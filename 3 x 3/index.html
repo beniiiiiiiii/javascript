@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="script.js">
+    <title>Véletlenszerű Számok</title>
+</head>
+<body>
+
+<div class="grid" id="grid">
+    <div class="number">1</div>
+    <div class="number">2</div>
+    <div class="number">3</div>
+    <div class="number">4</div>
+    <div class="number">5</div>
+    <div class="number">6</div>
+    <div class="number">7</div>
+    <div class="number">8</div>
+    <div class="number">9</div>
+</div>
+
+<button onclick="shuffleNumbers()">Keverd össze a számokat</button>
+
+<script>
+    function shuffleNumbers() {
+        const grid = document.getElementById('grid');
+        const numbers = Array.from(grid.children);
+        
+        // Véletlenszerű sorrend
+        for (let i = numbers.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [numbers[i].innerText, numbers[j].innerText] = [numbers[j].innerText, numbers[i].innerText];
+        }
+    }
+</script>
+
+</body>
+</html>
