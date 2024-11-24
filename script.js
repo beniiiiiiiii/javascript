@@ -1,9 +1,8 @@
-let currentPlayer = 'X';  // Kezdő játékos (X)
-let gameBoard = ['', '', '', '', '', '', '', '', ''];  // A játéktábla
+let currentPlayer = 'X';
+let gameBoard = ['', '', '', '', '', '', '', '', ''];
 let isGameOver = false;
-let gameMode = '';  // player-vs-player vagy player-vs-computer
+let gameMode = '';
 
-// Inicializálás vagy új játék indítása
 function startGame(mode = 'player-vs-player') {
     gameMode = mode;
     currentPlayer = 'X';
@@ -14,7 +13,6 @@ function startGame(mode = 'player-vs-player') {
     renderBoard();
 }
 
-// Játéktábla kirajzolása
 function renderBoard() {
     const grid = document.getElementById('grid');
     grid.innerHTML = '';
@@ -27,14 +25,12 @@ function renderBoard() {
     });
 }
 
-// A játékos kattintása
 function handleClick(index) {
     if (isGameOver || gameBoard[index] !== '') return;
 
     gameBoard[index] = currentPlayer;
     renderBoard();
     
-    // Ellenőrizzük, hogy van-e győztes
     if (checkWinner()) {
         document.getElementById('result').textContent = `${currentPlayer} játékos nyert!`;
         isGameOver = true;
@@ -42,7 +38,6 @@ function handleClick(index) {
         return;
     }
 
-    // Ellenőrizzük, hogy döntetlen-e
     if (gameBoard.every(cell => cell !== '')) {
         document.getElementById('result').textContent = 'A játék döntetlen.';
         isGameOver = true;
@@ -50,16 +45,13 @@ function handleClick(index) {
         return;
     }
 
-    // Következő játékos
     currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
     
-    // Ha számítógép játékmód van és a következő lépés a gépé
     if (gameMode === 'player-vs-computer' && currentPlayer === 'O') {
         computerMove();
     }
 }
 
-// Számítógép lépése (véletlenszerű)
 function computerMove() {
     if (isGameOver) return;
 
@@ -81,7 +73,6 @@ function computerMove() {
     }
 }
 
-// Nyertes ellenőrzés
 function checkWinner() {
     const winPatterns = [
         [0, 1, 2],
