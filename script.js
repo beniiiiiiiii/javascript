@@ -1,69 +1,101 @@
-// Hozz létre egy js fájlt, mely megoldaj a az alábbi feladatokat.
-// Mindegyik feladatot függvénnyel old meg!
+let currentPlayer = 'X';  // Kezdő játékos (X)
+let gameBoard = ['', '', '', '', '', '', '', '', ''];  // A játéktábla
+let isGameOver = false;
+let gameMode = '';  // player-vs-player vagy player-vs-computer
 
-// 1. getOtosLotteryNumbers - Ötöslottó számokat generál le véletlenszerűen, melyeket egy tömbben ad vissza.
-const getOtosLotteryNumbers = () => {
-  let numbers = [];
-  while (numbers.length < 5) {
-    let number = Math.floor(Math.random() * 90) + 1;
-    if (!numbers.includes(number)) {
-      numbers.push(number);
-    }
-  }
-  return numbers;
-};
+// Inicializálás vagy új játék indítása
+function startGame(mode = 'player-vs-player') {
+    gameMode = mode;
+    currentPlayer = 'X';
+    gameBoard = ['', '', '', '', '', '', '', '', ''];
+    isGameOver = false;
+    document.getElementById('result').textContent = '';
+    document.getElementById('resetBtn').style.display = 'none';
+    renderBoard();
+}
 
-// 2. getSortedtLotteryNumbers - paraméterrként kapott tömböt növekvő sorrendbe rendezi, a rendezett tömböt visszaadja
-const getSortedtLotteryNumbers = (numbers) => {
-  return numbers.sort((a, b) => a - b);
-};
-
-// 3. getNumberOfHits - két paramétert kap, egy tömböt lottószámokkal és egy tömböt a tippekkel. Visszaadja, hogy a tippekből ány egyezett meg a lottószámokkal
-const getNumberOfHits = (lotteryNumbers, tips) => {
-  let hits = 0;
-  tips.forEach((tip) => {
-    if (lotteryNumbers.includes(tip)) {
-      hits++;
-    }
-  });
-  return hits;
-};
-
-// 4. getMonthlyLotteryArrayNumbers - négy hét lottószámait adja vissza egy tömbben, mely a heti lottószámok tömbjét tartalmazza (meghívja a getOtosLotteryNumbers függvényt)
-const getMonthlyLotteryArrayNumbers = () => {
-  let monthlyLotteryNumbers = [];
-  for (let i = 0; i < 4; i++) {
-    monthlyLotteryNumbers.push(getOtosLotteryNumbers());
-  }
-  return monthlyLotteryNumbers;
-};
-
-// 5. getMonthlyLotteryArrayNumbers - paraméterként kapja a négy hét lottószámainak tömbjét és visszaadja, hogy a hónapban mely számokat húzták ki. A viszatérő listában, minden szám csak egyszer szerepelhet.
-const getMonthlyLotteryNumbers = (monthlyLotteryNumbers) => {
-  let numbers = [];
-  monthlyLotteryNumbers.forEach((week) => {
-    week.forEach((number) => {
-      if (!numbers.includes(number)) {
-        numbers.push(number);
-      }
+// Játéktábla kirajzolása
+function renderBoard() {
+    const grid = document.getElementById('grid');
+    grid.innerHTML = '';
+    gameBoard.forEach((cell, index) => {
+        const cellElement = document.createElement('div');
+        cellElement.classList.add('cell');
+        cellElement.textContent = cell;
+        cellElement.addEventListener('click', () => handleClick(index));
+        grid.appendChild(cellElement);
     });
-  });
-  return numbers;
-};
+}
 
-// 6. monthlyStatistics - paranéterként kapha a havi lottószámok tömbjét. Egy tömböt ad vissza, melynek elemei tömbök, melyben az első elem a lottószám, a második eleme, hogy a hónapban a számot hányszor húzták ki.
+// A játékos kattintása
+function handleClick(index) {
+    if (isGameOver || gameBoard[index] !== '') return;
 
-const monthlyStatistics = (monthlyLotteryNumbers) => {
-  let numbers = getMonthlyLotteryNumbers(monthlyLotteryNumbers);
-  let statistics = [];
-  numbers.forEach((number) => {
-    let count = 0;
-    monthlyLotteryNumbers.forEach((week) => {
-      if (week.includes(number)) {
-        count++;
-      }
+    gameBoard[index] = currentPlayer;
+    renderBoard();
+    
+    // Ellenőrizzük, hogy van-e győztes
+    if (checkWinner()) {
+        document.getElementById('result').textContent = `${currentPlayer} játékos nyert!`;
+        isGameOver = true;
+        document.getElementById('resetBtn').style.display = 'block';
+        return;
+    }
+
+    // Ellenőrizzük, hogy döntetlen-e
+    if (gameBoard.every(cell => cell !== '')) {
+        document.getElementById('result').textContent = 'A játék döntetlen.';
+        isGameOver = true;
+        document.getElementById('resetBtn').style.display = 'block';
+        return;
+    }
+
+    // Következő játékos
+    currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+    
+    // Ha számítógép játékmód van és a következő lépés a gépé
+    if (gameMode === 'player-vs-computer' && currentPlayer === 'O') {
+        computerMove();
+    }
+}
+
+// Számítógép lépése (véletlenszerű)
+function computerMove() {
+    if (isGameOver) return;
+
+    let availableCells = gameBoard.map((cell, index) => cell === '' ? index : null).filter(cell => cell !== null);
+    let randomIndex = availableCells[Math.floor(Math.random() * availableCells.length)];
+    gameBoard[randomIndex] = 'O';
+    renderBoard();
+
+    if (checkWinner()) {
+        document.getElementById('result').textContent = `O játékos nyert!`;
+        isGameOver = true;
+        document.getElementById('resetBtn').style.display = 'block';
+    } else if (gameBoard.every(cell => cell !== '')) {
+        document.getElementById('result').textContent = 'A játék döntetlen.';
+        isGameOver = true;
+        document.getElementById('resetBtn').style.display = 'block';
+    } else {
+        currentPlayer = 'X';
+    }
+}
+
+// Nyertes ellenőrzés
+function checkWinner() {
+    const winPatterns = [
+        [0, 1, 2],
+        [3, 4, 5],
+        [6, 7, 8],
+        [0, 3, 6],
+        [1, 4, 7],
+        [2, 5, 8],
+        [0, 4, 8],
+        [2, 4, 6]
+    ];
+
+    return winPatterns.some(pattern => {
+        const [a, b, c] = pattern;
+        return gameBoard[a] && gameBoard[a] === gameBoard[b] && gameBoard[a] === gameBoard[c];
     });
-    statistics.push([number, count]);
-  });
-  return statistics;
-};
+}
