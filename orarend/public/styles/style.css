@@ -1,0 +1,97 @@
+*{
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+h1{
+    margin: 25px;
+    text-align: center;
+}
+
+.container{
+    display: flex;
+    justify-self: center;
+}
+
+tr, td, th{
+    font-size: 20px;
+    border: 5px solid black;
+}
+
+table{
+    border: 5px solid black;
+    border-collapse: collapse;
+}
+
+.classNumberCounter{
+    width: 130px;
+    height: 70px;
+    text-align: center;
+}
+
+.cell{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+}
+
+.class-button{
+    font-size: larger;
+    height: 90px;
+    width: 90px;
+    border-radius: 10px;
+    background-color: rgb(108, 190, 108);
+    color: white;
+    border: none;
+    font-weight: bolder;
+}
+
+.class-info {
+  background-color: #ff4321;
+  border: 5px solid #ccc;
+  padding: 10px;
+  border-radius: 8px;
+  text-align: center;
+  font-family: Arial, sans-serif;
+  position: relative;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.class-info:hover {
+  background-color: #e0efff;
+  transform: scale(1.02);
+}
+
+.buttons {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  display: none;
+}
+
+.buttons button {
+  margin: 5px;
+  padding: 5px 10px;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.edit-btn {
+  background-color: #ffdb58;
+  border: none;
+  color: white;
+}
+
+.delete-btn {
+  background-color: #ff6347;
+  border: none;
+  color: white;
+}
+
+.edit-btn:hover,
+.delete-btn:hover {
+  opacity: 0.8;
+}

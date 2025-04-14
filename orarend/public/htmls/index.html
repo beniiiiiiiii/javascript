@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/styles/style.css">
+    <title>Timetable App</title>
+</head>
+<body>
+    <h1>Timetable</h1>
+    <div class="container">
+        <table>
+            <tr>
+                <th class="classNumberCounter"></th>
+                <th class="classNumberCounter">0</th>
+                <th class="classNumberCounter">1</th>
+                <th class="classNumberCounter">2</th>
+                <th class="classNumberCounter">3</th>
+                <th class="classNumberCounter">4</th>
+                <th class="classNumberCounter">5</th>
+                <th class="classNumberCounter">6</th>
+                <th class="classNumberCounter">7</th>
+                <th class="classNumberCounter">8</th>
+                <th class="classNumberCounter">9</th>
+                <th class="classNumberCounter">10</th>
+                <th class="classNumberCounter">11</th>
+                <th class="classNumberCounter">12</th>
+            </tr>
+            <tr>
+                <th class="classNumberCounter">Monday</th>
+                <td><div class="cell"><button data-day="Monday" data-period="0" onclick="addClass(this)" class="class-button">+</button></div></td>
+                <td><div class="cell"><button data-day="Monday" data-period="1" onclick="addClass(this)" class="class-button">+</button></div></td>
+                <td><div class="cell"><button data-day="Monday" data-period="2" onclick="addClass(this)" class="class-button">+</button></div></td>
+                <td><div class="cell"><button data-day="Monday" data-period="3" onclick="addClass(this)" class="class-button">+</button></div></td>
+                <td><div class="cell"><button data-day="Monday" data-period="4" onclick="addClass(this)" class="class-button">+</button></div></td>
+                <td><div class="cell"><button data-day="Monday" data-period="5" onclick="addClass(this)" class="class-button">+</button></div></td>
+                <td><div class="cell"><button data-day="Monday" data-period="6" onclick="addClass(this)" class="class-button">+</button></div></td>
+                <td><div class="cell"><button data-day="Monday" data-period="7" onclick="addClass(this)" class="class-button">+</button></div></td>
+                <td><div class="cell"><button data-day="Monday" data-period="8" onclick="addClass(this)" class="class-button">+</button></div></td>
+                <td><div class="cell"><button data-day="Monday" data-period="9" onclick="addClass(this)" class="class-button">+</button></div></td>
+                <td><div class="cell"><button data-day="Monday" data-period="10" onclick="addClass(this)" class="class-button">+</button></div></td>
+                <td><div class="cell"><button data-day="Monday" data-period="11" onclick="addClass(this)" class="class-button">+</button></div></td>
+                <td><div class="cell"><button data-day="Monday" data-period="12" onclick="addClass(this)" class="class-button">+</button></div></td>
+            </tr>
+            <tr>
+                <th class="classNumberCounter">Tuesday</th>
+                <td><div class="cell"><button data-day="Tuesday" data-period="0" onclick="addClass(this)" class="class-button">+</button></div></td>
+                <td><div class="cell"><button data-day="Tuesday" data-period="1" onclick="addClass(this)" class="class-button">+</button></div></td>
+                <td><div class="cell"><button data-day="Tuesday" data-period="2" onclick="addClass(this)" class="class-button">+</button></div></td>
+                <td><div class="cell"><button data-day="Tuesday" data-period="3" onclick="addClass(this)" class="class-button">+</button></div></td>
+                <td><div class="cell"><button data-day="Tuesday" data-period="4" onclick="addClass(this)" class="class-button">+</button></div></td>
+                <td><div class="cell"><button data-day="Tuesday" data-period="5" onclick="addClass(this)" class="class-button">+</button></div></td>
+                <td><div class="cell"><button data-day="Tuesday" data-period="6" onclick="addClass(this)" class="class-button">+</button></div></td>
+                <td><div class="cell"><button data-day="Tuesday" data-period="7" onclick="addClass(this)" class="class-button">+</button></div></td>
+                <td><div class="cell"><button data-day="Tuesday" data-period="8" onclick="addClass(this)" class="class-button">+</button></div></td>
+                <td><div class="cell"><button data-day="Tuesday" data-period="9" onclick="addClass(this)" class="class-button">+</button></div></td>
+                <td><div class="cell"><button data-day="Tuesday" data-period="10" onclick="addClass(this)" class="class-button">+</button></div></td>
+                <td><div class="cell"><button data-day="Tuesday" data-period="11" onclick="addClass(this)" class="class-button">+</button></div></td>
+                <td><div class="cell"><button data-day="Tuesday" data-period="12" onclick="addClass(this)" class="class-button">+</button></div></td>
+            </tr>
+            <tr>
+                <th class="classNumberCounter">Wednesday</th>
+                <td><div class="cell"><button data-day="Wednesday" data-period="0" onclick="addClass(this)" class="class-button">+</button></div></td>
+                <td><div class="cell"><button data-day="Wednesday" data-period="1" onclick="addClass(this)" class="class-button">+</button></div></td>
+                <td><div class="cell"><button data-day="Wednesday" data-period="2" onclick="addClass(this)" class="class-button">+</button></div></td>
+                <td><div class="cell"><button data-day="Wednesday" data-period="3" onclick="addClass(this)" class="class-button">+</button></div></td>
+                <td><div class="cell"><button data-day="Wednesday" data-period="4" onclick="addClass(this)" class="class-button">+</button></div></td>
+                <td><div class="cell"><button data-day="Wednesday" data-period="5" onclick="addClass(this)" class="class-button">+</button></div></td>
+                <td><div class="cell"><button data-day="Wednesday" data-period="6" onclick="addClass(this)" class="class-button">+</button></div></td>
+                <td><div class="cell"><button data-day="Wednesday" data-period="7" onclick="addClass(this)" class="class-button">+</button></div></td>
+                <td><div class="cell"><button data-day="Wednesday" data-period="8" onclick="addClass(this)" class="class-button">+</button></div></td>
+                <td><div class="cell"><button data-day="Wednesday" data-period="9" onclick="addClass(this)" class="class-button">+</button></div></td>
+                <td><div class="cell"><button data-day="Wednesday" data-period="10" onclick="addClass(this)" class="class-button">+</button></div></td>
+                <td><div class="cell"><button data-day="Wednesday" data-period="11" onclick="addClass(this)" class="class-button">+</button></div></td>
+                <td><div class="cell"><button data-day="Wednesday" data-period="12" onclick="addClass(this)" class="class-button">+</button></div></td>
+            </tr>
+            <tr>
+                <th class="classNumberCounter">Thursday</th>
+                <td><div class="cell"><button data-day="Thursday" data-period="0" onclick="addClass(this)" class="class-button">+</button></div></td>
+                <td><div class="cell"><button data-day="Thursday" data-period="1" onclick="addClass(this)" class="class-button">+</button></div></td>
+                <td><div class="cell"><button data-day="Thursday" data-period="2" onclick="addClass(this)" class="class-button">+</button></div></td>
+                <td><div class="cell"><button data-day="Thursday" data-period="3" onclick="addClass(this)" class="class-button">+</button></div></td>
+                <td><div class="cell"><button data-day="Thursday" data-period="4" onclick="addClass(this)" class="class-button">+</button></div></td>
+                <td><div class="cell"><button data-day="Thursday" data-period="5" onclick="addClass(this)" class="class-button">+</button></div></td>
+                <td><div class="cell"><button data-day="Thursday" data-period="6" onclick="addClass(this)" class="class-button">+</button></div></td>
+                <td><div class="cell"><button data-day="Thursday" data-period="7" onclick="addClass(this)" class="class-button">+</button></div></td>
+                <td><div class="cell"><button data-day="Thursday" data-period="8" onclick="addClass(this)" class="class-button">+</button></div></td>
+                <td><div class="cell"><button data-day="Thursday" data-period="9" onclick="addClass(this)" class="class-button">+</button></div></td>
+                <td><div class="cell"><button data-day="Thursday" data-period="10" onclick="addClass(this)" class="class-button">+</button></div></td>
+                <td><div class="cell"><button data-day="Thursday" data-period="11" onclick="addClass(this)" class="class-button">+</button></div></td>
+                <td><div class="cell"><button data-day="Thursday" data-period="12" onclick="addClass(this)" class="class-button">+</button></div></td>
+            </tr>
+            <tr>
+                <th class="classNumberCounter">Friday</th>
+                <td><div class="cell"><button data-day="Friday" data-period="0" onclick="addClass(this)" class="class-button">+</button></div></td>
+                <td><div class="cell"><button data-day="Friday" data-period="1" onclick="addClass(this)" class="class-button">+</button></div></td>
+                <td><div class="cell"><button data-day="Friday" data-period="2" onclick="addClass(this)" class="class-button">+</button></div></td>
+                <td><div class="cell"><button data-day="Friday" data-period="3" onclick="addClass(this)" class="class-button">+</button></div></td>
+                <td><div class="cell"><button data-day="Friday" data-period="4" onclick="addClass(this)" class="class-button">+</button></div></td>
+                <td><div class="cell"><button data-day="Friday" data-period="5" onclick="addClass(this)" class="class-button">+</button></div></td>
+                <td><div class="cell"><button data-day="Friday" data-period="6" onclick="addClass(this)" class="class-button">+</button></div></td>
+                <td><div class="cell"><button data-day="Friday" data-period="7" onclick="addClass(this)" class="class-button">+</button></div></td>
+                <td><div class="cell"><button data-day="Friday" data-period="8" onclick="addClass(this)" class="class-button">+</button></div></td>
+                <td><div class="cell"><button data-day="Friday" data-period="9" onclick="addClass(this)" class="class-button">+</button></div></td>
+                <td><div class="cell"><button data-day="Friday" data-period="10" onclick="addClass(this)" class="class-button">+</button></div></td>
+                <td><div class="cell"><button data-day="Friday" data-period="11" onclick="addClass(this)" class="class-button">+</button></div></td>
+                <td><div class="cell"><button data-day="Friday" data-period="12" onclick="addClass(this)" class="class-button">+</button></div></td>
+            </tr>
+        </table>
+    </div>
+<script src="../script.js" defer></script>
+</body>
+</html>

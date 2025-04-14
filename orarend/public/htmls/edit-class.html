@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/styles/addingPageStyling.css">
+    <title>Edit Class</title>
+</head>
+<body>
+    <h1>Edit Class</h1>
+    <form id="edit-form" onsubmit="return false;">
+        <label for="class-name">Class name:</label>
+        <input type="text" id="class-name" name="class_name" required><br>
+
+        <label for="teacher-name">Teacher:</label>
+        <input type="text" id="teacher-name" name="teacher" required><br>
+
+        <label for="room-number">Room:</label>
+        <input type="text" id="room-number" name="room" required><br>
+
+        <button type="button" onclick="editClassInDB()">Save Changes</button>
+    </form>
+    <script src="../script.js" defer></script>
+</body>
+</html>
