@@ -1,0 +1,7 @@
+npm init -y
+npm i express
+npm i nodemon --save-dev
+npm i sqlite3
+npm run dev
+
+npm i (if the packages are already downloaded)

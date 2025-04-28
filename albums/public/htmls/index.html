@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../styles/style.css">
+    <title>Music Albums</title>
+</head>
+<body>
+    <header>
+        <h1>Music Albums</h1>
+        <nav class="menu">
+            <button class="menu-button" id="add_album_tab">Add New Album</button>
+            <button class="menu-button" id="list_albums_tab">View Albums</button>
+            <button class="menu-button" id="show_album_tab">Album Details</button>
+        </nav>
+    </header>
+    <main>
+        <section class="form-section add-album">
+            <button id="close_add_album_tab" class="close-button">Close</button>
+            <h2>Add a New Album</h2>
+            <form onsubmit="return false;">
+                <div class="form-group">
+                    <label for="singerInput">Artist/Band</label>
+                    <input id="singerInput" type="text" placeholder="Enter artist or band name" required>
+                </div>
+                <div class="form-group">
+                    <label for="titleInput">Album Name</label>
+                    <input id="titleInput" type="text" placeholder="Enter album name" required>
+                </div>
+                <div class="form-group">
+                    <label for="releaseYear">Year of Release</label>
+                    <input id="releaseYear" type="number" min="1960" placeholder="e.g., 1960" required>
+                </div>
+                <div class="form-group">
+                    <label for="songAmount">Number of Tracks</label>
+                    <input id="songAmount" type="number" min="1" placeholder="e.g., 10" required>
+                </div>
+                <div class="form-actions">
+                    <button id="saveBtn" type="submit">Save</button>
+                </div>
+            </form>
+        </section>
+
+        <section class="form-section display-album">
+            <button id="close_display_album_tab" class="close-button">Close</button>
+            <h2>View Album Details</h2>
+            <form onsubmit="return false;">
+                <div class="form-group">
+                    <label for="albumId">Album ID</label>
+                    <input id="albumId" type="number" min="1" placeholder="Enter album ID" required>
+                </div>
+                <div class="form-actions">
+                    <button id="submitBtn" type="submit">View</button>
+                </div>
+            </form>
+            <div id="albumDisplay" class="album-details"></div>
+        </section>
+
+        <section class="list-section">
+            <button id="close_list_tab" class="close-button">Close</button>
+            <h2>Album List</h2>
+            <!-- Content for album list will go here -->
+        </section>
+    </main>
+    <script src="../script.js"></script>
+</body>
+</html>
