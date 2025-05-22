@@ -1,20 +1,12 @@
-// cursor
-const customCursor = document.querySelector("[data-cursor-dot]");
 
-window.addEventListener("mousemove", (event) => {
-  const x = event.clientX;
-  const y = event.clientY;
-
-  customCursor.style.left = `${x}px`;
-  customCursor.style.top = `${y}px`;
-});
 
 // max year set
 const maxYear = new Date().getFullYear();
 document.getElementById("releaseYear").setAttribute("max", maxYear);
 
 // Toggle add album
-document.getElementById("open_add_album_tab").addEventListener("click", () => {
+document.getElementById("add_album_tab").addEventListener("click", () => {
+  console.log("add album tab clicked");
   toggleFormVisibility("add-album", ["display-album", "listView"]);
 });
 
@@ -23,7 +15,7 @@ document.getElementById("close_add_album_tab").addEventListener("click", () => {
 });
 
 // toggle display album
-document.getElementById("open_display_album").addEventListener("click", () => {
+document.getElementById("show_album_tab").addEventListener("click", () => {
   toggleFormVisibility("display-album", ["add-album", "listView"]);
 });
 
@@ -32,11 +24,11 @@ document.getElementById("close_display_album_tab").addEventListener("click", () 
 });
 
 // toggle list
-document.getElementById("open_list_view_tab").addEventListener("click", async () => {
-  const listContainer = document.querySelector(".listView");
+document.getElementById("list_albums_tab").addEventListener("click", async () => {
+  const listContainer = document.querySelector(".list-section");
   clearAlbumCards(listContainer);
 
-  toggleFormVisibility("listView", ["add-album", "display-album"]);
+  toggleFormVisibility("list-section", ["add-album", "display-album"]);
 
   try {
     const response = await fetch("/albums");
@@ -57,7 +49,8 @@ document.getElementById("open_list_view_tab").addEventListener("click", async ()
 });
 
 document.getElementById("close_list_tab").addEventListener("click", () => {
-  hideForm("listView");
+  console.log("close button clicked");
+  hideForm("list-section");
 });
 
 // save/update
@@ -109,6 +102,10 @@ function toggleFormVisibility(formToShow, formsToHide) {
 
 function hideForm(formClass) {
   const form = document.querySelector(`.${formClass}`);
+  if (!form) {
+    console.error(`Element with class "${formClass}" not found.`);
+    return;
+  }
   form.style.display = "none";
   form.classList.remove("active");
 }
@@ -184,21 +181,28 @@ function clearAlbumDetails() {
 }
 
 function addAlbumToListView(album) {
-  const listView = document.querySelector(".listView");
+  console.log("Adding album to list view:", album);
+
+  const listContainer = document.querySelector(".list-section");
+  if (!listContainer) {
+    console.error("Element with class 'list-section' not found.");
+    return;
+  }
+
+  console.log("List container found:", listContainer);
+
   const albumCard = document.createElement("div");
-  albumCard.classList.add("album-card");
+  albumCard.classList.add("albumCard");
 
   albumCard.innerHTML = `
-    <div class="album-header">
-      <h3>${album.singer} - ${album.title}</h3>
-      <span>(${album.release_year})</span>
-    </div>
-    <div class="album-info">
-      <p>Songs: ${album.song_amount}</p>
-    </div>
+    <h3>${album.title}</h3>
+    <p>Singer: ${album.singer}</p>
+    <p>Release Year: ${album.release_year}</p>
+    <p>Songs: ${album.song_amount}</p>
   `;
 
-  listView.appendChild(albumCard);
+  listContainer.appendChild(albumCard);
+  console.log("Album card added:", albumCard);
 }
 
 async function fetchLastAlbumId() {

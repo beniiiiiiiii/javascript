@@ -1,8 +1,8 @@
 * {
-    margin: 0;
+    margin: 5px;
     padding: 0;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    color: #f0f0f0;
+    color: #000000;
     box-sizing: border-box;
 }
 
@@ -11,12 +11,14 @@ body {
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    background-color: #1a1a1d;
+    background: linear-gradient(135deg, #1e3c72, #2a5298);
 }
 
 img {
     width: 150px;
     height: 150px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 header {
@@ -24,259 +26,89 @@ header {
     top: 0;
     left: 0;
     width: 100%;
-    padding: 20px 100px;
+    padding: 15px 40px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: #2c2c34;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    background-color: #333a56;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    z-index: 1000;
 }
 
-.menuBtn {
-    width: 130px;
-    height: 50px;
-    background: transparent;
-    border: 2px solid #f0f0f0;
-    outline: none;
-    border-radius: 6px;
-    font-size: 1.1em;
-    color: #f0f0f0;
-    font-weight: 500;
-    margin-left: 40px;
-    transition: 0.5s;
-    cursor: pointer;
+header h1 {
+    font-size: 1.8rem;
+    color: #f9f9f9;
 }
 
-.menuBtn:hover {
-    background: #f0f0f0;
-    color: #1a1a1d;
-}
-
-.form-box {
-    border: 1px solid rgba(240, 240, 240, 0.6);
-    width: 350px;
-    height: 400px;
-    border-radius: 25px;
-    background: rgba(240, 240, 240, 0.1);
-    position: relative;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}
-
-input {
-    background: #333;
-    outline: none;
+header .menuBtn {
+    padding: 10px 20px;
+    background-color: #4caf50;
+    color: #ffffff;
     border: none;
-    border-radius: 3px;
-    width: 250px;
-    height: 25px;
-    color: #f0f0f0;
-    padding: 5px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
 }
 
-h2 {
-    text-align: center;
-    color: #f0f0f0;
-}
-
-.add-album h2 {
-    font-size: 1.8em;
-    margin-top: 15px;
-}
-
-.input-box {
-    display: flex;
-    flex-direction: column;
-    margin: 30px 55px;
-}
-
-.input-box-flex {
-    display: flex;
-    flex-direction: column;
-    margin: 30px 55px;
-    align-items: center;
-    text-align: center;
-}
-
-label {
-    font-size: 1.1em;
-    margin-bottom: 5px;
-}
-
-#releaseYear {
-    width: 100px;
+header .menuBtn:hover {
+    background-color: #45a049;
 }
 
 button {
-    background: #29292e;
-    color: #f0f0f0;
+    padding: 10px 15px;
+    background-color: #007bff;
+    color: #ffffff;
     border: none;
-    border-radius: 6px;
+    border-radius: 5px;
     cursor: pointer;
-    transition: 0.3s;
+    transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 button:hover {
-    background: #f0f0f0;
-    color: #29292e;
+    background-color: #0056b3;
+    transform: scale(1.05);
 }
 
-.add-album {
-    height: 480px;
+
+.list-section {
     display: none;
-    flex-direction: column;
-    align-items: center;
-    transform: scale(0);
-    opacity: 0;
-    transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
-}
-
-.add-album.active {
-    display: flex;
-    transform: scale(1);
-    opacity: 1;
-}
-
-.display-album h2 {
-    margin-top: 15px;
-}
-
-.display-album {
-    height: 240px;
-    display: none;
-    flex-direction: column;
-    align-items: center;
-    transform: scale(0);
-    opacity: 0;
-    transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
-}
-
-.display-album.active {
-    display: flex;
-    transform: scale(1);
-    opacity: 1;
-}
-
-#saveBtn, #submitBtn {
-    width: 130px;
-    height: 50px;
-    background: transparent;
-    border: 2px solid #f0f0f0;
-    outline: none;
-    border-radius: 6px;
-    font-size: 1.1em;
-    color: #f0f0f0;
-    font-weight: 500;
-    transition: 0.5s;
-    align-self: center;
-}
-
-#saveBtn:hover, #submitBtn:hover {
-    background: #f0f0f0;
-    color: #1a1a1d;
-}
-
-#close_add_album_tab, #close_display_album_tab, #close_list_tab {
-    width: 50px;
-    height: 50px;
-    text-align: center;
-    background-color: #d9534f;
-    position: absolute;
-    top: 0;
-    right: 0;
-    border-radius: 0 25px 0 0;
-    color: #fff;
-    font-weight: bold;
-    cursor: pointer;
-}
-
-#close_add_album_tab:hover, #close_display_album_tab:hover, #close_list_tab:hover {
-    background-color: #c9302c;
-}
-
-#save_btn_container {
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-}
-
-.album-display {
-    margin-top: 20px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-}
-
-.album-card {
-    border: 2px solid rgba(240, 240, 240, 0.6);
+    flex-wrap: wrap;
+    gap: 20px;
     padding: 20px;
-    margin: 10px;
-    border-radius: 12px;
-    background-color: rgba(240, 240, 240, 0.1);
-    width: 320px;
-    text-align: center;
+    background-color: #2c2c34;
+    border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-.album-card h3 {
-    font-size: 1.5em;
-    margin-bottom: 10px;
+.list-section.active {
+    display: flex; /* Show when active */
 }
 
-.album-card p {
-    margin: 5px 0;
-    font-size: 1.1em;
+.list-section .albumCard {
+    display: none; /* Hidden by default */
+    background-color: #44475a;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s ease;
 }
 
-.album-card:hover {
-    background-color: rgba(240, 240, 240, 0.2);
-    border-color: #f0f0f0;
-    transform: scale(1.05);
-    transition: transform 0.3s ease, background-color 0.3s ease, border-color 0.3s ease;
+.list-section .albumCard.visible {
+    display: block; /* Show when visible */
 }
 
-.action-btn {
-    width: 100px;
-    height: 35px;
-    background: transparent;
-    border: 2px solid #f0f0f0;
-    outline: none;
-    border-radius: 6px;
-    font-size: 1em;
+.list-section .albumCard:hover {
+    transform: translateY(-5px);
+}
+
+footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 10px 20px;
+    text-align: center;
+    background-color: #333a56;
     color: #f0f0f0;
-    font-weight: 500;
-    margin-top: 10px;
-    transition: 0.5s;
-    cursor: pointer;
-}
-
-.action-btn:hover {
-    background: #f0f0f0;
-    color: #1a1a1d;
-}
-
-.edit-btn {
-    background-color: #5cb85c;
-}
-
-.delete-btn {
-    background-color: #d9534f;
-}
-
-.listView {
-    padding: 40px;
-    border: 1px solid rgba(240, 240, 240, 0.6);
-    border-radius: 25px;
-    background: rgba(240, 240, 240, 0.1);
-    display: none;
-    align-items: center;
-    transform: scale(0);
-    opacity: 0;
-    transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
-}
-
-.listView.active {
-    display: flex;
-    transform: scale(1);
-    opacity: 1;
+    font-size: 0.9rem;
 }
