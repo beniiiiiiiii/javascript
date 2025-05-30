@@ -1,5 +1,9 @@
-const Database = require('better-sqlite3');
-const path = require('path');
+import Database from 'better-sqlite3';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const db = new Database(path.resolve(__dirname, 'blog.db'));
 
@@ -27,32 +31,7 @@ if (userCount === 0) {
   const insertUser = db.prepare('INSERT INTO users (name) VALUES (?)');
   const userIds = [];
   userIds.push(insertUser.run('Anna Kovács').lastInsertRowid);
-  userIds.push(insertUser.run('Béla Nagy').lastInsertRowid);
-  userIds.push(insertUser.run('Csilla Tóth').lastInsertRowid);
 
-  const insertPost = db.prepare(`
-    INSERT INTO posts (author_id, title, category, content, created_at, updated_at)
-    VALUES (?, ?, ?, ?, ?, ?)
-  `);
-
-  const now = new Date();
-
-  userIds.forEach((userId, index) => {
-    for (let i = 1; i <= 2; i++) {
-      const createdAt = new Date(now.getTime() - (index * 5 + i) * 24 * 60 * 60 * 1000);
-      const updatedAt = new Date(createdAt.getTime() + 2 * 60 * 60 * 1000); 
-
-      insertPost.run(
-        userId,
-        `Blogbejegyzés ${i} - ${index + 1}. felhasználó`,
-        ['Tech', 'Utazás', 'Gasztronómia'][index % 3],
-        `Ez a(z) ${i}. bejegyzés tartalma a(z) ${index + 1}. felhasználótól.`,
-        createdAt.toISOString(),
-        updatedAt.toISOString()
-      );
-    }
-  });
 }
 
-module.exports = db;
-
+export default db;

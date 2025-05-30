@@ -1,13 +1,12 @@
-const express = require('express');
-const path = require('path');
-const db = require('./database');
-const app = express();
+import express from 'express';
+import path from 'path';
+import db from './util/database.js';
 
+const app = express();
 const PORT = 3000;
 
-
 app.use(express.json());
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(process.cwd(), 'public'))); 
 
 const getAuthorName = (id) => {
   const row = db.prepare('SELECT name FROM users WHERE id = ?').get(id);
@@ -24,6 +23,16 @@ app.get('/api/posts', (req, res) => {
   res.json(posts);
 });
 
+app.get('/api/users', (req, res) => {
+  try {
+    const users = db.prepare('SELECT id, name FROM users').all(); 
+    res.json(users);
+  } catch (error) {
+    console.error('Error fetching users:', error);
+    res.status(500).json({ error: 'Failed to fetch users' });
+  }
+});
+
 app.post('/api/posts', (req, res) => {
   const { author_id, title, category, content } = req.body;
   if (!author_id || !title || !category || !content) {
@@ -34,51 +43,10 @@ app.post('/api/posts', (req, res) => {
     INSERT INTO posts (author_id, title, category, content, created_at, updated_at)
     VALUES (?, ?, ?, ?, ?, ?)
   `);
-  const info = stmt.run(author_id, title, category, content, now, now);
-  const newPost = db.prepare('SELECT * FROM posts WHERE id = ?').get(info.lastInsertRowid);
-  newPost.author = getAuthorName(newPost.author_id);
-  res.status(201).json(newPost);
-});
-
-app.put('/api/posts/:id', (req, res) => {
-  const postId = req.params.id;
-  const { author_id, title, category, content } = req.body;
-  // Validate exists
-  const post = db.prepare('SELECT * FROM posts WHERE id = ?').get(postId);
-  if (!post) {
-    return res.status(404).json({ error: 'Post not found' });
-  }
-  if (!author_id || !title || !category || !content) {
-    return res.status(400).json({ error: 'Missing required fields' });
-  }
-  const now = new Date().toISOString();
-  const stmt = db.prepare(`
-    UPDATE posts SET author_id = ?, title = ?, category = ?, content = ?, updated_at = ?
-    WHERE id = ?
-  `);
-  stmt.run(author_id, title, category, content, now, postId);
-  const updatedPost = db.prepare('SELECT * FROM posts WHERE id = ?').get(postId);
-  updatedPost.author = getAuthorName(updatedPost.author_id);
-  res.json(updatedPost);
-});
-
-app.delete('/api/posts/:id', (req, res) => {
-  const postId = req.params.id;
-  // Validate exists
-  const post = db.prepare('SELECT * FROM posts WHERE id = ?').get(postId);
-  if (!post) {
-    return res.status(404).json({ error: 'Post not found' });
-  }
-  db.prepare('DELETE FROM posts WHERE id = ?').run(postId);
-  res.json({ success: true });
-});
-
-app.get('/api/users', (req, res) => {
-  const users = db.prepare('SELECT id, name FROM users').all();
-  res.json(users);
+  stmt.run(author_id, title, category, content, now, now);
+  res.status(201).json({ message: 'Post created successfully' });
 });
 
 app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
+  console.log(`Server is running on http://localhost:${PORT}`);
 });
-
