@@ -14,31 +14,36 @@ document.addEventListener('DOMContentLoaded', () => {
   let posts = [];
   let editMode = false;
 
-  // Fetch users for author dropdown
-  async function loadUsers() {
-    try {
-      const res = await fetch('/api/users');
-      users = await res.json();
-      authorSelect.innerHTML = users
-        .map(
-          (user) =>
-            `<option value="${user.id}">${escapeHtml(user.name)}</option>`
-        )
-        .join('');
-    } catch (error) {
-      alert('Hiba történt a szerzők betöltésekor.');
-    }
-  }
+async function loadAuthors() {
+  try {
+    const res = await fetch('/api/users');
+    const authors = await res.json();
 
-  // Escape to prevent XSS
-  function escapeHtml(text) {
-    return text
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;')
-      .replace(/'/g, '&#039;');
+    authorSelect.innerHTML = authors
+      .map(
+        (author) =>
+          `<option value="${author.id}">${escapeHtml(author.name)}</option>`
+      )
+      .join('');
+  } catch (error) {
+    console.error('Error loading authors:', error);
+    alert('An error occurred while loading authors.');
   }
+}
+
+// Escape HTML to prevent XSS
+function escapeHtml(text) {
+  return text
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  loadAuthors();
+});
 
   // Fetch posts and render
   async function loadPosts() {
@@ -199,7 +204,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Initialize on page load
   (async () => {
-    await loadUsers();
+    await loadAuthors();
     await loadPosts();
     resetForm();
   })();
