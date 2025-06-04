@@ -1,76 +1,249 @@
-// app.js
 const express = require('express');
-const db = require('./database');
-
+const path = require('path');
+const Database = require('better-sqlite3');
 const app = express();
-app.use(express.json());
-app.use(express.static('public'));
+const db = new Database(path.join(__dirname, 'data', 'invoice.db'));
 
-// Get all invoices
+app.use(express.json());
+app.use(express.static(path.join(__dirname, 'public')));
+
+
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`Server running on http://localhost:${PORT}`);
+});
+
+
+const getIssuerById = (id) =>
+  db.prepare('SELECT * FROM issuers WHERE id = ?').get(id);
+
+const getCustomerById = (id) =>
+  db.prepare('SELECT * FROM customers WHERE id = ?').get(id);
+
+
 app.get('/api/invoices', (req, res) => {
   const invoices = db.prepare(`
-    SELECT invoices.*, issuers.name AS issuer_name, customers.name AS customer_name
-    FROM invoices
-    JOIN issuers ON invoices.issuer_id = issuers.id
-    JOIN customers ON invoices.customer_id = customers.id
+    SELECT inv.*, 
+      iss.name AS issuer_name, iss.address AS issuer_address, iss.tax_id AS issuer_tax_id,
+      cust.name AS customer_name, cust.address AS customer_address, cust.tax_id AS customer_tax_id
+    FROM invoices inv
+    JOIN issuers iss ON inv.issuer_id = iss.id
+    JOIN customers cust ON inv.customer_id = cust.id
+    ORDER BY inv.issue_date DESC
   `).all();
   res.json(invoices);
 });
 
-// Get invoice by ID
-app.get('/api/invoices/:id', (req, res) => {
-  const invoice = db.prepare(`
-    SELECT invoices.*, issuers.name AS issuer_name, customers.name AS customer_name
-    FROM invoices
-    JOIN issuers ON invoices.issuer_id = issuers.id
-    JOIN customers ON invoices.customer_id = customers.id
-    WHERE invoices.id = ?
-  `).get(req.params.id);
-
-  if (invoice) {
-    res.json(invoice);
-  } else {
-    res.status(404).json({ error: 'Invoice not found' });
-  }
-});
-
-// Create invoice
 app.post('/api/invoices', (req, res) => {
-  const { issuer_id, customer_id, number, issue_date, fulfillment_date, due_date, total, vat } = req.body;
-  const stmt = db.prepare(`
-    INSERT INTO invoices (issuer_id, customer_id, number, issue_date, fulfillment_date, due_date, total, vat)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-  `);
-  const result = stmt.run(issuer_id, customer_id, number, issue_date, fulfillment_date, due_date, total, vat);
-  res.status(201).json({ id: result.lastInsertRowid });
+  const {
+    issuer_id,
+    customer_id,
+    invoice_number,
+    issue_date,
+    fulfillment_date,
+    payment_deadline,
+    total_amount,
+    vat_rate,
+  } = req.body;
+
+  if (
+    !issuer_id ||
+    !customer_id ||
+    !invoice_number ||
+    !issue_date ||
+    !fulfillment_date ||
+    !payment_deadline ||
+    total_amount == null ||
+    vat_rate == null
+  ) {
+    return res.status(400).json({ error: 'Hiányzó kötelező mezők' });
+  }
+
+  try {
+    const stmt = db.prepare(`
+      INSERT INTO invoices 
+      (issuer_id, customer_id, invoice_number, issue_date, fulfillment_date, payment_deadline, total_amount, vat_rate)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+    `);
+
+    const info = stmt.run(
+      issuer_id,
+      customer_id,
+      invoice_number,
+      issue_date,
+      fulfillment_date,
+      payment_deadline,
+      total_amount,
+      vat_rate
+    );
+
+    const newInvoice = db.prepare('SELECT * FROM invoices WHERE id = ?').get(info.lastInsertRowid);
+    res.status(201).json(newInvoice);
+  } catch (error) {
+    if (error.code === 'SQLITE_CONSTRAINT_UNIQUE') {
+      return res.status(400).json({ error: 'Már létezik ilyen számla szám' });
+    }
+    res.status(500).json({ error: 'Nem várt hiba történt' });
+  }
 });
 
-// Update invoice
 app.put('/api/invoices/:id', (req, res) => {
-  const { issuer_id, customer_id, number, issue_date, fulfillment_date, due_date, total, vat } = req.body;
-  const stmt = db.prepare(`
-    UPDATE invoices SET issuer_id = ?, customer_id = ?, number = ?, issue_date = ?, fulfillment_date = ?, due_date = ?, total = ?, vat = ?
-    WHERE id = ?
-  `);
-  const result = stmt.run(issuer_id, customer_id, number, issue_date, fulfillment_date, due_date, total, vat, req.params.id);
+  const id = req.params.id;
+  const {
+    issuer_id,
+    customer_id,
+    invoice_number,
+    issue_date,
+    fulfillment_date,
+    payment_deadline,
+    total_amount,
+    vat_rate,
+  } = req.body;
 
-  if (result.changes > 0) {
-    res.json({ message: 'Invoice updated' });
-  } else {
-    res.status(404).json({ error: 'Invoice not found' });
+  const invoice = db.prepare('SELECT * FROM invoices WHERE id = ?').get(id);
+  if (!invoice) {
+    return res.status(404).json({ error: 'A számla nem található' });
+  }
+
+  if (
+    !issuer_id ||
+    !customer_id ||
+    !invoice_number ||
+    !issue_date ||
+    !fulfillment_date ||
+    !payment_deadline ||
+    total_amount == null ||
+    vat_rate == null
+  ) {
+    return res.status(400).json({ error: 'Hiányzó kötelező mezők' });
+  }
+
+  try {
+    const stmt = db.prepare(`
+      UPDATE invoices SET
+      issuer_id = ?, customer_id = ?, invoice_number = ?, issue_date = ?, fulfillment_date = ?, payment_deadline = ?, total_amount = ?, vat_rate = ?
+      WHERE id = ?
+    `);
+    stmt.run(
+      issuer_id,
+      customer_id,
+      invoice_number,
+      issue_date,
+      fulfillment_date,
+      payment_deadline,
+      total_amount,
+      vat_rate,
+      id
+    );
+
+    const updatedInvoice = db.prepare('SELECT * FROM invoices WHERE id = ?').get(id);
+    res.json(updatedInvoice);
+  } catch (error) {
+    if (error.code === 'SQLITE_CONSTRAINT_UNIQUE') {
+      return res.status(400).json({ error: 'Már létezik ilyen számla szám' });
+    }
+    res.status(500).json({ error: 'Nem várt hiba történt' });
   }
 });
 
-// Delete invoice
 app.delete('/api/invoices/:id', (req, res) => {
-  const stmt = db.prepare(`DELETE FROM invoices WHERE id = ?`);
-  const result = stmt.run(req.params.id);
+  const id = req.params.id;
+  const invoice = db.prepare('SELECT * FROM invoices WHERE id = ?').get(id);
+  if (!invoice) {
+    return res.status(404).json({ error: 'A számla nem található' });
+  }
+  db.prepare('DELETE FROM invoices WHERE id = ?').run(id);
+  res.json({ success: true });
+});
 
-  if (result.changes > 0) {
-    res.json({ message: 'Invoice deleted' });
-  } else {
-    res.status(404).json({ error: 'Invoice not found' });
+app.get('/api/customers', (req, res) => {
+  const customers = db.prepare('SELECT * FROM customers').all();
+  res.json(customers);
+});
+
+app.get('/api/issuers', (req, res) => {
+  const issuers = db.prepare('SELECT * FROM issuers').all();
+  res.json(issuers);
+});
+
+// Issuers
+app.post('/api/issuers', (req, res) => {
+  const { name, address, tax_id } = req.body;
+  if (!name || !address || !tax_id) {
+    return res.status(400).json({ error: 'Hiányzó mezők' });
+  }
+  try {
+    const stmt = db.prepare('INSERT INTO issuers (name, address, tax_id) VALUES (?, ?, ?)');
+    const info = stmt.run(name, address, tax_id);
+    const newIssuer = db.prepare('SELECT * FROM issuers WHERE id = ?').get(info.lastInsertRowid);
+    res.status(201).json(newIssuer);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Szerverhiba' });
   }
 });
 
-app.listen(3000, () => console.log('Server running on http://localhost:3000'));
+app.put('/api/issuers/:id', (req, res) => {
+  const id = req.params.id;
+  const { name, address, tax_id } = req.body;
+  if (!name || !address || !tax_id) {
+    return res.status(400).json({ error: 'Hiányzó mezők' });
+  }
+  const issuer = db.prepare('SELECT * FROM issuers WHERE id = ?').get(id);
+  if (!issuer) return res.status(404).json({ error: 'Nem található kiállító' });
+
+  try {
+    const stmt = db.prepare('UPDATE issuers SET name=?, address=?, tax_id=? WHERE id=?');
+    stmt.run(name, address, tax_id, id);
+    const updatedIssuer = db.prepare('SELECT * FROM issuers WHERE id = ?').get(id);
+    res.json(updatedIssuer);
+  } catch {
+    res.status(500).json({ error: 'Szerverhiba' });
+  }
+});
+
+// Customers
+app.post('/api/customers', (req, res) => {
+  const { name, address, tax_id } = req.body;
+  if (!name || !address || !tax_id) {
+    return res.status(400).json({ error: 'Hiányzó mezők' });
+  }
+  try {
+    const stmt = db.prepare('INSERT INTO customers (name, address, tax_id) VALUES (?, ?, ?)');
+    const info = stmt.run(name, address, tax_id);
+    const newCustomer = db.prepare('SELECT * FROM customers WHERE id = ?').get(info.lastInsertRowid);
+    res.status(201).json(newCustomer);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Szerverhiba' });
+  }
+});
+
+app.put('/api/customers/:id', (req, res) => {
+  const id = req.params.id;
+  const { name, address, tax_id } = req.body;
+  if (!name || !address || !tax_id) {
+    return res.status(400).json({ error: 'Hiányzó mezők' });
+  }
+  const customer = db.prepare('SELECT * FROM customers WHERE id = ?').get(id);
+  if (!customer) return res.status(404).json({ error: 'Nem található vevő' });
+
+  try {
+    const stmt = db.prepare('UPDATE customers SET name=?, address=?, tax_id=? WHERE id=?');
+    stmt.run(name, address, tax_id, id);
+    const updatedCustomer = db.prepare('SELECT * FROM customers WHERE id = ?').get(id);
+    res.json(updatedCustomer);
+  } catch {
+    res.status(500).json({ error: 'Szerverhiba' });
+  }
+});
+
+
+// Start server
+app.listen(PORT, () => {
+  console.log(`Server fut a http://localhost:${PORT}`);
+});

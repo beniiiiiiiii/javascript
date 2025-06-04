@@ -1,41 +1,303 @@
-body {
-  background-color: #121212;
-  color: #ffffff;
-  font-family: Arial, sans-serif;
-  margin: 0;
-  padding: 20px;
+/* Reset */
+* {
+  box-sizing: border-box;
 }
 
-h1 {
-  text-align: center;
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #121212;
+  color: #e0e0e0;
+  margin: 0;
+  padding: 0;
+  line-height: 1.5;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.container {
+  display: flex;
+  height: 100vh;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1rem;
+  gap: 2rem;
+}
+
+/* Left side - invoice list */
+#invoices-section {
+  flex: 1 1 40%;
+  display: flex;
+  flex-direction: column;
+}
+
+#invoices-section h2 {
+  border-bottom: 2px solid #bb86fc;
+  padding-bottom: 0.5rem;
+  margin-bottom: 1rem;
   color: #bb86fc;
 }
 
-p#summary {
-  text-align: center;
-  margin-top: 20px;
-  font-size: 1.2em;
-  color: #ffffff;
+#invoices-list {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding-right: 0.5rem;
 }
 
-table {
+/* Invoice cards - smaller, compact */
+.invoice-card {
+  background: #1f1b2e;
+  border-radius: 12px;
+  padding: 1rem;
+  box-shadow: 0 4px 8px rgba(187, 134, 252, 0.3);
+  position: relative;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
   width: 100%;
-  border-collapse: collapse;
-  margin-top: 20px;
-  background-color: #1e1e1e;
+  max-width: 350px;
+  margin-left: auto;
 }
 
-th, td {
-  border: 1px solid #333;
-  padding: 10px;
-  text-align: left;
+.invoice-card:hover {
+  background: #2c2269;
+  transform: translateY(-4px);
 }
 
-th {
-  background-color: #272727;
-  color: #03dac6;
+.invoice-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
-td {
+.invoice-number {
+  font-weight: 700;
+  color: #bb86fc;
+  font-size: 1.2rem;
+  user-select: none;
+}
+
+.invoice-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.invoice-actions button {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: #bb86fc;
+  font-weight: 700;
+  padding: 0.2rem 0.4rem;
+  border-radius: 6px;
+  transition: background-color 0.2s ease;
+  font-size: 1rem;
+  user-select: none;
+}
+
+.invoice-actions button:hover {
+  background-color: #bb86fc;
+  color: #121212;
+}
+
+.invoice-section {
+  margin-top: 0.75rem;
+  font-size: 0.9rem;
+  color: #ccc;
+  user-select: none;
+}
+
+.invoice-issuer, .invoice-client {
+  font-weight: 600;
   color: #e0e0e0;
+}
+
+.invoice-meta {
+  margin-top: 0.75rem;
+  font-size: 0.85rem;
+  color: #aaa;
+}
+
+.invoice-field {
+  margin-top: 0.25rem;
+}
+
+/* Right side - form */
+#form-section {
+  flex: 1 1 55%;
+  background: #1d1b27;
+  border-radius: 16px;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 6px 20px rgba(187, 134, 252, 0.4);
+  overflow-y: auto;
+}
+
+#form-section h2 {
+  color: #bb86fc;
+  margin-bottom: 1.5rem;
+  user-select: none;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  flex: 1 1 auto;
+}
+
+label {
+  color: #ccc;
+  font-weight: 600;
+  user-select: none;
+}
+
+input[type="text"],
+input[type="date"],
+input[type="number"],
+select,
+textarea {
+  padding: 0.6rem 0.8rem;
+  font-size: 1rem;
+  border: 1.5px solid #444;
+  border-radius: 8px;
+  background-color: #2c2269;
+  color: #e0e0e0;
+  transition: border-color 0.3s ease;
+  width: 100%;
+  resize: vertical;
+  min-height: 40px;
+}
+
+input[type="text"]:focus,
+input[type="date"]:focus,
+input[type="number"]:focus,
+select:focus,
+textarea:focus {
+  outline: none;
+  border-color: #bb86fc;
+  box-shadow: 0 0 6px rgba(187, 134, 252, 0.7);
+}
+
+textarea {
+  min-height: 100px;
+}
+
+.form-buttons {
+  display: flex;
+  gap: 1rem;
+  margin-top: auto;
+}
+
+button#save-button {
+  background-color: #bb86fc;
+  color: #121212;
+  font-weight: 700;
+  font-size: 1rem;
+  border: none;
+  border-radius: 10px;
+  padding: 0.9rem 1.8rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  flex-grow: 1;
+}
+
+button#save-button:hover {
+  background-color: #9a6cff;
+}
+
+button#cancel-button {
+  background-color: transparent;
+  border: 2px solid #666;
+  color: #aaa;
+  font-weight: 700;
+  border-radius: 10px;
+  padding: 0.9rem 1.8rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  flex-grow: 1;
+}
+
+button#cancel-button:hover {
+  background-color: #666;
+  color: #121212;
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* Scrollbar styling for invoice list and form */
+#invoices-list::-webkit-scrollbar,
+#form-section::-webkit-scrollbar {
+  width: 8px;
+}
+
+#invoices-list::-webkit-scrollbar-thumb,
+#form-section::-webkit-scrollbar-thumb {
+  background-color: #bb86fc;
+  border-radius: 4px;
+}
+
+#invoices-list::-webkit-scrollbar-track,
+#form-section::-webkit-scrollbar-track {
+  background-color: #1f1b2e;
+}
+
+/* Responsive design */
+@media (max-width: 900px) {
+  .container {
+    flex-direction: column;
+    padding: 1rem 1.5rem;
+  }
+
+  #invoices-section,
+  #form-section {
+    flex: unset;
+    width: 100%;
+    max-height: 50vh;
+  }
+
+  #invoices-list {
+    flex-direction: row;
+    overflow-x: auto;
+    max-height: 100%;
+  }
+
+  .invoice-card {
+    max-width: 280px;
+    margin-left: 0;
+  }
+}
+
+#customer-list div.customer-item {
+  padding: 0.5rem;
+  border-bottom: 1px solid #444;
+  color: #e0e0e0;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#customer-list div.customer-item:last-child {
+  border-bottom: none;
+}
+
+.customer-item button {
+  background: transparent;
+  border: none;
+  color: #bb86fc;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 1rem;
+  user-select: none;
+  transition: color 0.3s ease;
+}
+
+.customer-item button:hover {
+  color: #9a6cff;
 }

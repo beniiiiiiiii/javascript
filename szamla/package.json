@@ -1,0 +1,17 @@
+   {
+     "name": "szamla",
+     "version": "1.0.0",
+     "description": "Invoice management system",
+     "main": "app.js",
+     "scripts": {
+       "dev": "nodemon app.js"
+     },
+     "keywords": [],
+     "author": "Your Name",
+     "license": "ISC",
+     "dependencies": {
+       "express": "^4.17.1",
+       "nodemon": "^2.0.7"
+     }
+   }
+   
