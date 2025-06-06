@@ -12,10 +12,7 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
-});
+const PORT = process.env.PORT || 3001;
 
 
 const getIssuerById = (id) =>
@@ -91,64 +88,7 @@ app.post('/api/invoices', (req, res) => {
   }
 });
 
-app.put('/api/invoices/:id', (req, res) => {
-  const id = req.params.id;
-  const {
-    issuer_id,
-    customer_id,
-    invoice_number,
-    issue_date,
-    fulfillment_date,
-    payment_deadline,
-    total_amount,
-    vat_rate,
-  } = req.body;
 
-  const invoice = db.prepare('SELECT * FROM invoices WHERE id = ?').get(id);
-  if (!invoice) {
-    return res.status(404).json({ error: 'A számla nem található' });
-  }
-
-  if (
-    !issuer_id ||
-    !customer_id ||
-    !invoice_number ||
-    !issue_date ||
-    !fulfillment_date ||
-    !payment_deadline ||
-    total_amount == null ||
-    vat_rate == null
-  ) {
-    return res.status(400).json({ error: 'Hiányzó kötelező mezők' });
-  }
-
-  try {
-    const stmt = db.prepare(`
-      UPDATE invoices SET
-      issuer_id = ?, customer_id = ?, invoice_number = ?, issue_date = ?, fulfillment_date = ?, payment_deadline = ?, total_amount = ?, vat_rate = ?
-      WHERE id = ?
-    `);
-    stmt.run(
-      issuer_id,
-      customer_id,
-      invoice_number,
-      issue_date,
-      fulfillment_date,
-      payment_deadline,
-      total_amount,
-      vat_rate,
-      id
-    );
-
-    const updatedInvoice = db.prepare('SELECT * FROM invoices WHERE id = ?').get(id);
-    res.json(updatedInvoice);
-  } catch (error) {
-    if (error.code === 'SQLITE_CONSTRAINT_UNIQUE') {
-      return res.status(400).json({ error: 'Már létezik ilyen számla szám' });
-    }
-    res.status(500).json({ error: 'Nem várt hiba történt' });
-  }
-});
 
 app.delete('/api/invoices/:id', (req, res) => {
   const id = req.params.id;

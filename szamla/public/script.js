@@ -119,7 +119,6 @@ document.addEventListener('DOMContentLoaded', () => {
           <div class="invoice-header">
             <div class="invoice-number">${escapeHtml(inv.invoice_number)}</div>
             <div class="invoice-actions">
-              <button class="edit-btn" title="Szerkesztés">✏️</button>
               <button class="delete-btn" title="Törlés">🗑️</button>
             </div>
           </div>
@@ -145,43 +144,16 @@ document.addEventListener('DOMContentLoaded', () => {
       })
       .join('');
 
-    // Add event listeners for edit and delete buttons
-    document.querySelectorAll('.edit-btn').forEach((btn) => {
-      btn.addEventListener('click', onEditClick);
-    });
     document.querySelectorAll('.delete-btn').forEach((btn) => {
       btn.addEventListener('click', onDeleteClick);
     });
   }
 
-  // Handle edit invoice click
-  function onEditClick(e) {
-    const invoiceId = e.target.closest('.invoice-card').dataset.id;
-    const invoice = invoices.find((i) => i.id == invoiceId);
-    if (!invoice) {
-      alert('A számla nem található.');
-      return;
-    }
-
-    invoiceIdInput.value = invoice.id;
-    issuerSelect.value = invoice.issuer_id;
-    customerSelect.value = invoice.customer_id;
-    invoiceNumberInput.value = invoice.invoice_number;
-    issueDateInput.value = invoice.issue_date;
-    fulfillmentDateInput.value = invoice.fulfillment_date;
-    paymentDeadlineInput.value = invoice.payment_deadline;
-    totalAmountInput.value = invoice.total_amount;
-    vatRateInput.value = (invoice.vat_rate * 100).toFixed(2);
-
-    editMode = true;
-    formTitle.textContent = 'Számla szerkesztése';
-    saveButton.textContent = 'Frissítés';
-    cancelButton.classList.remove('hidden');
-  }
+  
 
   // Handle delete invoice click
   async function onDeleteClick(e) {
-    if (!confirm('Biztosan törölni szeretnéd a számlát?')) return;
+    if (!confirm('Biztosan sztornózni szeretné a számlát?')) return;
     const invoiceId = e.target.closest('.invoice-card').dataset.id;
 
     try {
