@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jokes Fetcher</title>
+    <style>
+        body {
+            background: #222;
+            color: #f0f0f0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+        header {
+            margin-top: 40px;
+            margin-bottom: 20px;
+        }
+        .menu {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .menu select, .menu input, .menu button {
+            padding: 8px 12px;
+            border-radius: 6px;
+            border: none;
+            font-size: 1em;
+        }
+        .menu button {
+            background: #5cb85c;
+            color: #fff;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .menu button:hover {
+            background: #4cae4c;
+        }
+        .joke-box {
+            background: #333;
+            border-radius: 12px;
+            padding: 24px;
+            margin-top: 20px;
+            min-width: 300px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            text-align: center;
+        }
+        .joke-type {
+            font-size: 0.9em;
+            color: #aaa;
+            margin-bottom: 8px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Joke Fetcher</h1>
+    </header>
+    <div class="menu">
+        <select id="fetchMode">
+            <option value="random">Random</option>
+            <option value="id">By ID</option>
+            <option value="type">By Type</option>
+        </select>
+        <input type="number" id="jokeId" placeholder="ID" style="display:none;">
+        <select id="jokeType" style="display:none;">
+            <option value="general">General</option>
+            <option value="programming">Programming</option>
+            <option value="knock-knock">Knock-Knock</option>
+        </select>
+        <button id="fetchBtn">Get Joke</button>
+    </div>
+    <div class="joke-box" id="jokeBox">
+        <span class="joke-type" id="jokeTypeDisplay"></span>
+        <div id="jokeText">Vicc itt jelenik meg.</div>
+    </div>
+
+    <script>
+        const fetchMode = document.getElementById('fetchMode');
+        const jokeIdInput = document.getElementById('jokeId');
+        const jokeTypeSelect = document.getElementById('jokeType');
+        const fetchBtn = document.getElementById('fetchBtn');
+        const jokeBox = document.getElementById('jokeBox');
+        const jokeText = document.getElementById('jokeText');
+        const jokeTypeDisplay = document.getElementById('jokeTypeDisplay');
+        const nextBtn = document.getElementById('nextBtn');
+
+        let lastRequest = { mode: 'random', value: null };
+
+        fetchMode.addEventListener('change', () => {
+            jokeIdInput.style.display = 'none';
+            jokeTypeSelect.style.display = 'none';
+            if (fetchMode.value === 'id') {
+                jokeIdInput.style.display = 'inline-block';
+            } else if (fetchMode.value === 'type') {
+                jokeTypeSelect.style.display = 'inline-block';
+            }
+        });
+
+        async function fetchJoke(mode, value) {
+            let url = '';
+            if (mode === 'random') {
+                url = 'https://official-joke-api.appspot.com/random_joke';
+            } else if (mode === 'id') {
+                url = `https://official-joke-api.appspot.com/jokes/${value}`;
+            } else if (mode === 'type') {
+                url = `https://official-joke-api.appspot.com/jokes/${value}/random`;
+            }
+
+            try {
+                const res = await fetch(url);
+                const data = await res.json();
+                let joke = data;
+                // For type, API returns array
+                if (Array.isArray(data)) joke = data[0];
+
+                if (!joke || !joke.setup) {
+                    jokeText.textContent = "Nem található vicc.";
+                    jokeTypeDisplay.textContent = "";
+                    return;
+                }
+
+                jokeTypeDisplay.textContent = `Típus: ${joke.type}`;
+                jokeText.innerHTML = `<strong>${joke.setup}</strong><br><em>${joke.punchline}</em>`;
+            } catch (err) {
+                jokeText.textContent = "Hiba történt a vicc lekérésekor.";
+                jokeTypeDisplay.textContent = "";
+            }
+        }
+
+        fetchBtn.addEventListener('click', () => {
+            let mode = fetchMode.value;
+            let value = null;
+            if (mode === 'id') {
+                value = jokeIdInput.value;
+                if (!value) return alert("Add meg az ID-t!");
+            } else if (mode === 'type') {
+                value = jokeTypeSelect.value;
+            }
+            lastRequest = { mode, value };
+            fetchJoke(mode, value);
+        });
+
+        nextBtn.addEventListener('click', () => {
+            fetchJoke(lastRequest.mode, lastRequest.value);
+        });
+
+        // Initial joke
+        fetchJoke('random');
+    </script>
+</body>
+</html>
