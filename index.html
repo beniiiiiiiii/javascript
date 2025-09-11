@@ -1,57 +1,152 @@
 <!DOCTYPE html>
 <html lang="hu">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tic-Tac-Toe</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-        }
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(3, 100px);
-            grid-gap: 5px;
-            justify-content: center;
-            margin-top: 20px;
-        }
-        .cell {
-            width: 100px;
-            height: 100px;
-            background-color: #f0f0f0;
-            border: 1px solid #ddd;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2em;
-            cursor: pointer;
-        }
-        .result {
-            margin-top: 20px;
-            font-size: 1.5em;
-        }
-        .menu {
-            margin-top: 20px;
-        }
-        button {
-            padding: 10px 20px;
-            font-size: 1em;
-            cursor: pointer;
-            margin: 5px;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bejelentkezés / Regisztráció</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      background-color: #f4f4f4;
+    }
+    .container {
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      width: 300px;
+    }
+    .form-group {
+      margin-bottom: 15px;
+    }
+    .form-group label {
+      display: block;
+      margin-bottom: 5px;
+    }
+    .form-group input {
+      width: 100%;
+      padding: 8px;
+      box-sizing: border-box;
+    }
+    .error {
+      color: red;
+      font-size: 0.9em;
+      display: none;
+    }
+    .toggle {
+      margin-top: 10px;
+      text-align: center;
+    }
+    .toggle button {
+      background: none;
+      border: none;
+      color: blue;
+      cursor: pointer;
+      text-decoration: underline;
+    }
+  </style>
 </head>
 <body>
-    <h1>Tic-Tac-Toe Játék</h1>
-    <div class="menu">
-        <button onclick="startGame('player-vs-player')">Két Játékos</button>
-        <button onclick="startGame('player-vs-computer')">Játékos vs Számítógép</button>
+  <div class="container">
+    <div id="login-form">
+      <h2>Bejelentkezés</h2>
+      <div class="form-group">
+        <label for="login-email">Email:</label>
+        <input type="email" id="login-email" placeholder="Email">
+        <span class="error" id="login-email-error">Érvénytelen email formátum!</span>
+      </div>
+      <div class="form-group">
+        <label for="login-password">Jelszó:</label>
+        <input type="password" id="login-password" placeholder="Jelszó">
+      </div>
+      <button onclick="handleLogin()">Bejelentkezés</button>
     </div>
-    <div class="grid" id="grid"></div>
-    <div class="result" id="result"></div>
-    <button id="resetBtn" onclick="startGame()" style="display: none;">Új játék</button>
 
-    <script src="../tictactoe/script.js"></script>
+    <div id="register-form" style="display: none;">
+      <h2>Regisztráció</h2>
+      <div class="form-group">
+        <label for="register-email">Email:</label>
+        <input type="email" id="register-email" placeholder="Email">
+        <span class="error" id="register-email-error">Érvénytelen email formátum!</span>
+      </div>
+      <div class="form-group">
+        <label for="register-password">Jelszó:</label>
+        <input type="password" id="register-password" placeholder="Jelszó">
+      </div>
+      <div class="form-group">
+        <label for="register-password-confirm">Jelszó megerősítése:</label>
+        <input type="password" id="register-password-confirm" placeholder="Jelszó megerősítése">
+        <span class="error" id="register-password-error">A jelszavak nem egyeznek!</span>
+      </div>
+      <button onclick="handleRegister()">Regisztráció</button>
+    </div>
+
+    <div class="toggle">
+      <button onclick="toggleForms()">Váltás bejelentkezés/regisztráció között</button>
+    </div>
+  </div>
+
+  <script>
+    function toggleForms() {
+      const loginForm = document.getElementById('login-form');
+      const registerForm = document.getElementById('register-form');
+      if (loginForm.style.display === 'none') {
+        loginForm.style.display = 'block';
+        registerForm.style.display = 'none';
+      } else {
+        loginForm.style.display = 'none';
+        registerForm.style.display = 'block';
+      }
+    }
+
+    function validateEmail(email) {
+      const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      return regex.test(email);
+    }
+
+    function handleLogin() {
+      const email = document.getElementById('login-email').value;
+      const emailError = document.getElementById('login-email-error');
+      if (!validateEmail(email)) {
+        emailError.style.display = 'block';
+      } else {
+        emailError.style.display = 'none';
+        alert('Sikeres bejelentkezés!');
+      }
+    }
+
+    function handleRegister() {
+      const email = document.getElementById('register-email').value;
+      const password = document.getElementById('register-password').value;
+      const confirmPassword = document.getElementById('register-password-confirm').value;
+      const emailError = document.getElementById('register-email-error');
+      const passwordError = document.getElementById('register-password-error');
+
+      let valid = true;
+
+      if (!validateEmail(email)) {
+        emailError.style.display = 'block';
+        valid = false;
+      } else {
+        emailError.style.display = 'none';
+      }
+
+      if (password !== confirmPassword) {
+        passwordError.style.display = 'block';
+        valid = false;
+      } else {
+        passwordError.style.display = 'none';
+      }
+
+      if (valid) {
+        alert('Sikeres regisztráció!');
+      }
+    }
+  </script>
 </body>
 </html>
