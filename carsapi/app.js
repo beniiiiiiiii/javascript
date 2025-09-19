@@ -7,10 +7,10 @@ app.use(express.json());
 
 const cars = [
   { id: 1, brand: "bmw", model: "sedam" },
-  { id: 1, brand: "kia", model: "sportage" },
-  { id: 1, brand: "toyota", model: "supra" },
-  { id: 1, brand: "nissan", model: "gtr" },
-  { id: 1, brand: "audi", model: "r8" },
+  { id: 2, brand: "kia", model: "sportage" },
+  { id: 3, brand: "toyota", model: "supra" },
+  { id: 4, brand: "nissan", model: "gtr" },
+  { id: 5, brand: "audi", model: "r8" },
 ];
 
 //getall
@@ -20,7 +20,7 @@ app.get("/cars", (req, res) => {
 
 //get by id
 app.get("/cars/:id", (req, res) => {
-  const id = req.params.id;
+  const id =+ req.params.id;
   const car = cars.find((car) => car.id === id);
   if (!car) {
     res.status(404).json({ message: "Car not found" });
