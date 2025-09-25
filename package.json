@@ -1,17 +1,17 @@
 {
-  "name": "cars",
+  "name": "feladat",
   "version": "1.0.0",
   "main": "app.js",
   "type": "module",
   "scripts": {
-    "start": "node app.js",
-    "dev": "nodemon app.js"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "better-sqlite3": "^12.4.1",
     "express": "^5.1.0"
   },
   "devDependencies": {
