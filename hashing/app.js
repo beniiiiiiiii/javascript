@@ -1,43 +1,25 @@
 import express from "express";
 import cors from "cors";
-import * as db from "./data/db.js";
-import bcrypt from "bcrypt";
+import postsRoutes from "./routes/postRoute.js";
+import usersRoutes from "./routes/userRoute.js";
 
 const PORT = 3000;
-
 const app = express();
 
 app.use(express.json());
 app.use(cors());
-app.use(express.static("public"));
+app.use(express.static(path.join(__dirname, "public")));
 
-app.get("/users", (req, res) => {
-  const users = db.getUsers();
-  res.json(users);
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "pages", "index.html"));
 });
 
-app.get("/users/:id", (req, res) => {
-  const user = db.getUserById(+req.params.id);
-  if (!user) {
-    return res.status(404).json({ message: "user not found" });
-  }
-  res.json(user);
-});
+const loginRouter = require("./routes/login");
+const postsRouter = require("./routes/posts");
 
-app.post("/users", (req, res) => {
-  const { email, password } = req.body;
-  if (!email || !password) {
-    return res.status(400).json({ message: "invalid data" });
-  }
-
-  const salt = bcrypt.genSaltSync(); //titkositja a jelszavakat a bcrypt hashelese
-
-  const hashedPassword = bcrypt.hashSync(password, salt);
-  const saved = db.saveUser(email, hashedPassword);
-  const user = db.getUserByid(saved.lastInsertedRowid);
-  res.status(201).json(user);
-});
+app.use("/posts", postsRoutes);
+app.use("/users", usersRoutes);
 
 app.listen(PORT, () => {
-  console.log(`Server runs on port ${PORT}`);
+  console.log(`Server is running on port ${PORT}`);
 });
