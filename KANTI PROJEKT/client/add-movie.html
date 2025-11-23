@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Add Movie - Filmfigyelő</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header>
+      <h1>Filmfigyelő</h1>
+      <nav>
+        <a href="index.html">Home</a>
+        <a href="login.html">Login</a>
+        <a href="register.html">Register</a>
+      </nav>
+    </header>
+
+    <main>
+      <h2>Add Movie</h2>
+      <form onsubmit="addMovie(); return false;" class="form">
+        <input id="movie-title" placeholder="Title" required />
+        <input id="movie-year" type="number" placeholder="Year" required />
+        <input id="movie-genre" placeholder="Genre" required />
+        <button type="submit">Add</button>
+      </form>
+      <div id="add-msg"></div>
+    </main>
+
+    <script src="app.js"></script>
+  </body>
+</html>

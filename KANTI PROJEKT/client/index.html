@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Filmfigyelő</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header>
+      <h1>Filmfigyelő</h1>
+      <nav>
+        <a href="index.html">Home</a>
+        <a href="login.html">Login</a>
+        <a href="register.html">Register</a>
+        <a href="add-movie.html">Add Movie</a>
+        <button onclick="logout()" class="logout-btn">Logout</button>
+      </nav>
+    </header>
+
+    <main class="cards">
+      <div id="login-warning" class="card">
+        <h2>Welcome</h2>
+        <p>
+          You must <a href="login.html">login</a> or
+          <a href="register.html">register</a> to see movies and your watchlist.
+        </p>
+      </div>
+
+      <section id="movies-card" class="card hidden">
+        <h2>Movies</h2>
+        <div id="movies-list"></div>
+      </section>
+
+      <section id="watchlist-card" class="card hidden">
+        <h2>My Watchlist</h2>
+        <div id="watchlist-list"></div>
+      </section>
+    </main>
+
+    <!-- hidden edit modal -->
+    <div id="edit-modal" class="modal hidden">
+      <div class="modal-content">
+        <h3>Edit Movie</h3>
+        <form onsubmit="saveMovieEdit(); return false;" class="form">
+          <input id="edit-id" type="hidden" />
+          <input id="edit-title" placeholder="Title" required />
+          <input id="edit-year" type="number" placeholder="Year" required />
+          <input id="edit-genre" placeholder="Genre" required />
+          <button type="submit">Save</button>
+          <button type="button" onclick="closeEdit()">Cancel</button>
+        </form>
+      </div>
+    </div>
+
+    <script src="app.js"></script>
+  </body>
+</html>
